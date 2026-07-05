@@ -1,6 +1,17 @@
 import { SavedStory } from '../models/savedStory.js';
 import { Story } from '../models/story.js';
 
+export const getStoryById = async (req, res) => {
+  const { id } = req.params;
+  const result = await Story.findById(id);
+
+  if (!result) {
+    return res.status(404).json({ message: 'Story not found' });
+  }
+
+  res.json(result);
+};
+
 export const saveStoryController = async (req, res) => {
   const { storyId } = req.params;
   const userId = req.user._id;
