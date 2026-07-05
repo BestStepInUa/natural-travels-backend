@@ -18,6 +18,8 @@ import { errorHandler } from './middleware/errorHandler.js';
 
 import { connectMongoDB } from './db/connectMongoDB.js';
 
+import storyRouter from './routes/storyRoutes.js';
+
 const app = express();
 
 app.use(cors());
@@ -27,6 +29,7 @@ app.use(logger);
 app.use(express.json());
 
 // part to connect routers
+app.use(storyRouter);
 
 app.use(notFoundHandler);
 app.use(errors());
