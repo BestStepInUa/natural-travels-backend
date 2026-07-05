@@ -1,8 +1,8 @@
-const express = require('express');
-const router = express.Router();
+import express from 'express';
+import { getStoryById } from '../controllers/storiesController.js';
 
-const { getStoryById } = require('../controllers/storiesController');
+const router = express.Router();
 
 router.get('/:id', getStoryById);
 
-module.exports = router;
+export default router;
