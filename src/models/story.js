@@ -1,18 +1,35 @@
-const { Schema, model } = require('mongoose');
+import { Schema, model } from 'mongoose';
+
+import { handleMongooseError, setUpdateOptions } from './hooks.js';
 
 const storySchema = new Schema(
   {
-    img: { type: String, required: true },
-    title: { type: String, required: true },
-    article: { type: String, required: true },
-    category: { type: Object, required: true },
-    rate: { type: Number, default: 0 },
-    ownerId: { type: Object, required: true },
-    date: { type: String, required: true },
+    title: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    image: {
+      type: String,
+      default: '',
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: true,
+    },
   },
-  { versionKey: false, timestamps: true },
+  {
+    versionKey: false,
+    timestamps: true,
+  },
 );
 
-const Story = model('story', storySchema);
+storySchema.post('save', handleMongooseError);
+storySchema.pre('findOneAndUpdate', setUpdateOptions);
+storySchema.post('findOneAndUpdate', handleMongooseError);
 
-module.exports = Story;
+export const Story = model('story', storySchema);
