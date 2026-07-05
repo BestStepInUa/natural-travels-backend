@@ -17,6 +17,7 @@ import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 import { connectMongoDB } from './db/connectMongoDB.js';
+import { authRouter } from './routes/authRoutes.js';
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use(logger);
 app.use(express.json());
 
 // part to connect routers
+app.use("/", authRouter);
 
 app.use(notFoundHandler);
 app.use(errors());
