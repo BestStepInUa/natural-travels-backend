@@ -21,6 +21,10 @@ const storySchema = new Schema(
       ref: 'user',
       required: true,
     },
+    category: {
+      type: String,
+      required: true,
+    },
   },
   {
     versionKey: false,
