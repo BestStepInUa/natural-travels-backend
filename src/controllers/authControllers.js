@@ -40,6 +40,7 @@ export const loginUser = async (req, res) => {
   setSessionCookies(res, session);
   res.json(user);
 };
+
 export const refreshUserSession = async (req, res) => {
   const { refreshToken, sessionId } = req.cookies;
 
