@@ -6,6 +6,7 @@ import {
   removeSavedStoryController,
   getMyStoriesController,
   getSavedStoriesController,
+  getStoryById,
 } from '../controllers/storiesController.js';
 
 import {
@@ -14,6 +15,8 @@ import {
 } from '../validations/storiesValidation.js';
 
 const storyRouter = Router();
+
+storyRouter.get('/stories/:id', getStoryById);
 
 storyRouter.post(
   '/stories/saved/:storyId',

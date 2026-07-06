@@ -9,6 +9,7 @@ import {
   loginUser,
   logoutUser,
   refreshUserSession,
+  getCurrentUser,
 } from '../controllers/authControllers.js';
 import { authenticate } from '../middleware/authenticate.js';
 
@@ -27,3 +28,4 @@ authRouter.post(
 );
 authRouter.post('/auth/refresh', authenticate, refreshUserSession);
 authRouter.post('/auth/logout', authenticate, logoutUser);
+authRouter.get("/auth/me", getCurrentUser);
