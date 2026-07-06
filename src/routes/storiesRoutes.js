@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { celebrate, Joi, Segments } from 'celebrate';
+import { celebrate } from 'celebrate';
 
 import {
   saveStoryController,

@@ -12,7 +12,7 @@ export const registerUser = async (req, res) => {
   if (exitingUser) {
     throw createHttpError(401, 'Email in use');
   }
-  const hashedPassword =await bcrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   const newUser = await User.create({ ...req.body, password: hashedPassword });
 
@@ -40,6 +40,7 @@ export const loginUser = async (req, res) => {
   setSessionCookies(res, session);
   res.json(user);
 };
+
 export const refreshUserSession = async (req, res) => {
   const { refreshToken, sessionId } = req.cookies;
 
@@ -76,32 +77,10 @@ export const logoutUser = async (req, res) => {
 
   res.status(204).send();
 };
-export const getCurrentUser = async (req, res) => {
+
+export const getMe = async (req, res) => {
   try {
-    const { accessToken, sessionId } = req.cookies;
-
-    if (!accessToken || !sessionId) {
-      throw createHttpError(401, "Not authenticated");
-    }
-
-    // Находим сессию по ID и токену
-    const session = await Session.findOne({ _id: sessionId, accessToken });
-    if (!session) {
-      throw createHttpError(401, "Invalid session");
-    }
-
-    // Проверяем срок действия accessToken
-    if (session.accessTokenValidUntil < new Date()) {
-      throw createHttpError(401, "Access token expired");
-    }
-
-    // Находим пользователя
-    const user = await User.findById(session.userId).select("-password");
-    if (!user) {
-      throw createHttpError(404, "User not found");
-    }
-
-    res.json(user);
+    res.json(req.user);
   } catch (error) {
     res.status(error.status || 500).json({ message: error.message });
   }
