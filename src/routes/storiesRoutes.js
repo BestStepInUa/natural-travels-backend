@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { celebrate, Joi, Segments } from 'celebrate';
+import { celebrate } from 'celebrate';
 
 import {
   saveStoryController,
@@ -19,25 +19,25 @@ const storyRouter = Router();
 storyRouter.get('/stories/:id', getStoryById);
 
 storyRouter.post(
-  '/:storyId/save',
+  '/stories/saved/:storyId',
   celebrate(storyIdSchema),
   saveStoryController,
 );
 
 storyRouter.delete(
-  '/:storyId/save',
+  '/stories/saved/:storyId',
   celebrate(storyIdSchema),
   removeSavedStoryController,
 );
 
 storyRouter.get(
-  '/my-stories',
+  'stories/my-stories',
   celebrate(paginationSchema),
   getMyStoriesController,
 );
 
 storyRouter.get(
-  '/saved',
+  'stories/saved',
   celebrate(paginationSchema),
   getSavedStoriesController,
 );
