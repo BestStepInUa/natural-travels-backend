@@ -16,25 +16,25 @@ import {
 const storyRouter = Router();
 
 storyRouter.post(
-  '/:storyId/save',
+  '/stories/saved/:storyId',
   celebrate(storyIdSchema),
   saveStoryController,
 );
 
 storyRouter.delete(
-  '/:storyId/save',
+  '/stories/saved/:storyId',
   celebrate(storyIdSchema),
   removeSavedStoryController,
 );
 
 storyRouter.get(
-  '/my-stories',
+  'stories/my-stories',
   celebrate(paginationSchema),
   getMyStoriesController,
 );
 
 storyRouter.get(
-  '/saved',
+  'stories/saved',
   celebrate(paginationSchema),
   getSavedStoriesController,
 );
