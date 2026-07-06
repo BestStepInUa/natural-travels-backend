@@ -6,7 +6,8 @@ const userSchema = new Schema(
     userName: { type: String, trim: true, required: true },
     email: { type: String, trim: true, required: true, unique: true },
     password: { type: String, trim: true, required: true },
-    avatar:{type: String, trim:true, default:""}
+    avatar: { type: String, trim: true, default: "" },
+    storiesCount: { type: Number, default: 0 }
   },
   { timestamps: true, versionKey: false },
 );
