@@ -76,3 +76,33 @@ export const logoutUser = async (req, res) => {
 
   res.status(204).send();
 };
+export const getCurrentUser = async (req, res) => {
+  try {
+    const { accessToken, sessionId } = req.cookies;
+
+    if (!accessToken || !sessionId) {
+      throw createHttpError(401, "Not authenticated");
+    }
+
+    // Находим сессию по ID и токену
+    const session = await Session.findOne({ _id: sessionId, accessToken });
+    if (!session) {
+      throw createHttpError(401, "Invalid session");
+    }
+
+    // Проверяем срок действия accessToken
+    if (session.accessTokenValidUntil < new Date()) {
+      throw createHttpError(401, "Access token expired");
+    }
+
+    // Находим пользователя
+    const user = await User.findById(session.userId).select("-password");
+    if (!user) {
+      throw createHttpError(404, "User not found");
+    }
+
+    res.json(user);
+  } catch (error) {
+    res.status(error.status || 500).json({ message: error.message });
+  }
+};
