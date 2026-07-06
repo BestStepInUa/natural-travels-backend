@@ -14,7 +14,7 @@ export const getStoryById = async (req, res) => {
   res.json(result);
 };
 
-export const saveStoryController = async (req, res) => {
+export const saveStory = async (req, res) => {
   const { storyId } = req.params;
   const userId = req.user._id;
 
@@ -34,7 +34,7 @@ export const saveStoryController = async (req, res) => {
   });
 };
 
-export const removeSavedStoryController = async (req, res) => {
+export const removeSavedStory = async (req, res) => {
   const { storyId } = req.params;
   const userId = req.user._id;
 
@@ -52,7 +52,7 @@ export const removeSavedStoryController = async (req, res) => {
   });
 };
 
-export const getMyStoriesController = async (req, res) => {
+export const getMyStories = async (req, res) => {
   const userId = req.user._id;
 
   const page = Number(req.query.page) || 1;
@@ -77,7 +77,7 @@ export const getMyStoriesController = async (req, res) => {
   });
 };
 
-export const getSavedStoriesController = async (req, res) => {
+export const getSavedStories = async (req, res) => {
   const userId = req.user._id;
 
   const page = Number(req.query.page) || 1;
