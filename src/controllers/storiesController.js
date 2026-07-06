@@ -1,3 +1,5 @@
+import createHttpError from 'http-errors';
+
 import { SavedStory } from '../models/savedStory.js';
 import { Story } from '../models/story.js';
 
@@ -19,9 +21,7 @@ export const saveStoryController = async (req, res) => {
   const story = await Story.findById(storyId);
 
   if (!story) {
-    return res.status(404).json({
-      message: 'Story not found',
-    });
+    throw createHttpError(404, 'Story not found');
   }
 
   await SavedStory.create({
@@ -44,9 +44,7 @@ export const removeSavedStoryController = async (req, res) => {
   });
 
   if (!deleted) {
-    return res.status(404).json({
-      message: 'Story is not in saved list',
-    });
+    throw createHttpError(404, 'Story is not in saved list');
   }
 
   res.status(200).json({
