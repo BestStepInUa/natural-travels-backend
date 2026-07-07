@@ -36,11 +36,11 @@ storyRouter.delete(
 );
 
 storyRouter.get(
-  'stories/my-stories',
+  '/stories/my-stories',
   celebrate(paginationSchema),
   getMyStories,
 );
 
-storyRouter.get('stories/saved', celebrate(paginationSchema), getSavedStories);
+storyRouter.get('/stories/saved', celebrate(paginationSchema), getSavedStories);
 
 export default storyRouter;
