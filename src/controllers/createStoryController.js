@@ -1,5 +1,5 @@
 import createHttpError from 'http-errors';
-import { Story } from '../models/story.js';
+import { Article } from '../models/article.js';
 import { saveStoryImageToCloudinary } from '../utils/saveStoryImageToCloudinary.js';
 
 export const createStoryController = async (req, res, next) => {
@@ -21,7 +21,7 @@ export const createStoryController = async (req, res, next) => {
       );
     }
 
-    const story = await Story.create({
+    const story = await Article.create({
       title,
       description: article,
       image: uploadResult.secure_url,
