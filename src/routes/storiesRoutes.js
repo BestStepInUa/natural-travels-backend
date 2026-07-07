@@ -13,7 +13,6 @@ import {
 import {
   getAllArticlesSchema,
   articleIdSchema,
-  paginationSchema,
 } from '../validations/storiesValidation.js';
 
 const storyRouter = Router();
@@ -36,13 +35,13 @@ storyRouter.delete(
 
 storyRouter.get(
   '/stories/my-stories',
-  celebrate(paginationSchema),
+  celebrate(getAllArticlesSchema),
   getMyArticle,
 );
 
 storyRouter.get(
   '/stories/saved',
-  celebrate(paginationSchema),
+  celebrate(getAllArticlesSchema),
   getSavedArticles,
 );
 
