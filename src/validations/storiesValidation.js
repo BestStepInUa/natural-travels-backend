@@ -1,10 +1,15 @@
-// import { Joi, Segments } from 'celebrate';
-// import { categories } from '../constants/categories.js';
+import { Joi, Segments } from 'celebrate';
+import { objectIdValidator } from '../utils/objectIdValidator.js';
 
-// export const getAllArticlesSchema = {
-//   [Segments.QUERY]: Joi.object({
-//     page: Joi.number().integer().min(1).default(1),
-//     perPage: Joi.number().integer().min(5).max(20).default(9),
-//     categories: Joi.string().valid(...categories),
-//   }),
-// };
+export const storyIdSchema = {
+  [Segments.PARAMS]: Joi.object({
+    storyId: Joi.string().required().custom(objectIdValidator),
+  }),
+};
+
+export const paginationSchema = {
+  [Segments.QUERY]: Joi.object({
+    page: Joi.number().integer().min(1).default(1),
+    perPage: Joi.number().integer().min(1).max(20).default(10),
+  }),
+};
