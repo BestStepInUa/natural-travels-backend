@@ -3,6 +3,8 @@ import dns from 'dns';
 // Це фікс для помилки querySrv ECONNREFUSED на Windows [citation:7]
 dns.setServers(['1.1.1.1', '8.8.8.8']);
 
+import './models/category.js';
+import './models/user.js';
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
