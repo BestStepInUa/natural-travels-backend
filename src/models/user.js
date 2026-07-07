@@ -3,10 +3,10 @@ import { handleMongooseError, setUpdateOptions } from './hooks.js';
 
 const userSchema = new Schema(
   {
-    userName: { type: String, trim: true, required: true },
+    name: { type: String, trim: true, required: true },
     email: { type: String, trim: true, required: true, unique: true },
     password: { type: String, trim: true, required: true },
-    avatar: { type: String, trim: true, default: '' },
+    avatarUrl: { type: String, trim: true, default: '' },
   },
   { timestamps: true, versionKey: false },
 );
