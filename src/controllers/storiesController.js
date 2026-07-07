@@ -5,7 +5,7 @@ import { Story } from '../models/story.js';
 import { Article } from '../models/article.js';
 // не видаляти ці імпорти, вони потрібні для звязки з колекціями в БД
 import { Category } from '../models/categories.js';
-import { User } from '../models/users.js';
+import { User } from '../models/user.js';
 
 export const getAllStories = async (req, res) => {
   const { page = 1, perPage = 9, category, type } = req.query;

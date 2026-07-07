@@ -19,8 +19,6 @@ import { errorHandler } from './middleware/errorHandler.js';
 import { connectMongoDB } from './db/connectMongoDB.js';
 import { authRouter } from './routes/authRoutes.js';
 
-// import storyRouter from './routes/storyRoutes.js';
-
 import storiesRouters from './routes/storiesRoutes.js';
 
 const app = express();
