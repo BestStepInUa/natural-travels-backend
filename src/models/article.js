@@ -1,4 +1,6 @@
 import { Schema, model } from 'mongoose';
+import { handleMongooseError, setUpdateOptions } from './hooks.js';
+
 const articleSchema = new Schema(
   {
     img: { type: String, required: true },
@@ -6,12 +8,16 @@ const articleSchema = new Schema(
     article: { type: String, minlength: 12, maxlength: 3000, required: true },
     category: { type: Schema.Types.ObjectId, ref: 'category', required: true },
     ownerId: { type: Schema.Types.ObjectId, ref: 'user', required: true },
-    rate: Number,
+    rate: { type: Number, default: 1 },
     date: String,
   },
   {
     timestamps: true,
-    collection: 'articles',
   },
 );
+
+articleSchema.post('save', handleMongooseError);
+articleSchema.pre('findOneAndUpdate', setUpdateOptions);
+articleSchema.post('findOneAndUpdate', handleMongooseError);
+
 export const Article = model('article', articleSchema);
