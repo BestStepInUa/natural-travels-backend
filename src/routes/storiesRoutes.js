@@ -2,10 +2,10 @@ import { Router } from 'express';
 import { celebrate } from 'celebrate';
 
 import {
-  saveStoryController,
-  removeSavedStoryController,
-  getMyStoriesController,
-  getSavedStoriesController,
+  saveStory,
+  removeSavedStory,
+  getMyStories,
+  getSavedStories,
   getStoryById,
 } from '../controllers/storiesController.js';
 
@@ -21,25 +21,21 @@ storyRouter.get('/stories/:id', getStoryById);
 storyRouter.post(
   '/stories/saved/:storyId',
   celebrate(storyIdSchema),
-  saveStoryController,
+  saveStory,
 );
 
 storyRouter.delete(
   '/stories/saved/:storyId',
   celebrate(storyIdSchema),
-  removeSavedStoryController,
+  removeSavedStory,
 );
 
 storyRouter.get(
-  'stories/my-stories',
+  '/stories/my-stories',
   celebrate(paginationSchema),
-  getMyStoriesController,
+  getMyStories,
 );
 
-storyRouter.get(
-  'stories/saved',
-  celebrate(paginationSchema),
-  getSavedStoriesController,
-);
+storyRouter.get('/stories/saved', celebrate(paginationSchema), getSavedStories);
 
 export default storyRouter;
