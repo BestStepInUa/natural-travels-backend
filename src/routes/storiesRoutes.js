@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { celebrate } from 'celebrate';
 
-import { getAllStories } from '../controllers/storiesController.js';
+import { getAllStories } from '../controllers/storiesControllers.js';
 
 import {
   saveStory,
@@ -9,7 +9,7 @@ import {
   getMyStories,
   getSavedStories,
   getStoryById,
-} from '../controllers/storiesController.js';
+} from '../controllers/storiesControllers.js';
 
 import {
   getAllStoriesSchema,
