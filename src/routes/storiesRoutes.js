@@ -2,44 +2,48 @@ import { Router } from 'express';
 import { celebrate } from 'celebrate';
 
 import {
-  saveStoryController,
-  removeSavedStoryController,
-  getMyStoriesController,
-  getSavedStoriesController,
-  getStoryById,
-} from '../controllers/storiesController.js';
+  getAllArticles,
+  saveArticle,
+  removeSavedArticle,
+  getMyArticle,
+  getSavedArticles,
+  getArticleById,
+} from '../controllers/storiesControllers.js';
 
 import {
-  storyIdSchema,
+  getAllArticlesSchema,
+  articleIdSchema,
   paginationSchema,
 } from '../validations/storiesValidation.js';
 
 const storyRouter = Router();
 
-storyRouter.get('/stories/:id', getStoryById);
+storyRouter.get('/stories', celebrate(getAllArticlesSchema), getAllArticles);
+
+storyRouter.get('/stories/:id', getArticleById);
 
 storyRouter.post(
   '/stories/saved/:storyId',
-  celebrate(storyIdSchema),
-  saveStoryController,
+  celebrate(articleIdSchema),
+  saveArticle,
 );
 
 storyRouter.delete(
   '/stories/saved/:storyId',
-  celebrate(storyIdSchema),
-  removeSavedStoryController,
+  celebrate(articleIdSchema),
+  removeSavedArticle,
 );
 
 storyRouter.get(
-  'stories/my-stories',
+  '/stories/my-stories',
   celebrate(paginationSchema),
-  getMyStoriesController,
+  getMyArticle,
 );
 
 storyRouter.get(
-  'stories/saved',
+  '/stories/saved',
   celebrate(paginationSchema),
-  getSavedStoriesController,
+  getSavedArticles,
 );
 
 export default storyRouter;

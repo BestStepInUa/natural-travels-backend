@@ -1,11 +1,48 @@
 import createHttpError from 'http-errors';
 
 import { SavedStory } from '../models/savedStory.js';
-import { Story } from '../models/story.js';
+import { Article } from '../models/article.js';
 
-export const getStoryById = async (req, res) => {
+export const getAllArticles = async (req, res) => {
+  const { page = 1, perPage = 9, category, type } = req.query;
+
+  const pageNumber = Number(page);
+  const perPageNumber = Number(perPage);
+  const skip = (pageNumber - 1) * perPageNumber;
+
+  const filter = {};
+
+  if (category) {
+    filter.category = category;
+  }
+
+  const sort = type === 'popular' ? { rate: -1 } : {};
+
+  const [totalStories, stories] = await Promise.all([
+    Article.countDocuments(filter),
+    Article.find(filter)
+      .sort(sort)
+      .skip(skip)
+      .limit(perPageNumber)
+      .populate('category')
+      .populate('ownerId')
+      .lean(),
+  ]);
+
+  const totalPages = Math.ceil(totalStories / perPageNumber) || 1;
+
+  res.status(200).json({
+    page: pageNumber,
+    perPage: perPageNumber,
+    totalStories,
+    totalPages,
+    stories,
+  });
+};
+
+export const getArticleById = async (req, res) => {
   const { id } = req.params;
-  const result = await Story.findById(id);
+  const result = await Article.findById(id);
 
   if (!result) {
     return res.status(404).json({ message: 'Story not found' });
@@ -14,11 +51,11 @@ export const getStoryById = async (req, res) => {
   res.json(result);
 };
 
-export const saveStory = async (req, res) => {
+export const saveArticle = async (req, res) => {
   const { storyId } = req.params;
   const userId = req.user._id;
 
-  const story = await Story.findById(storyId);
+  const story = await Article.findById(storyId);
 
   if (!story) {
     throw createHttpError(404, 'Story not found');
@@ -34,7 +71,7 @@ export const saveStory = async (req, res) => {
   });
 };
 
-export const removeSavedStory = async (req, res) => {
+export const removeSavedArticle = async (req, res) => {
   const { storyId } = req.params;
   const userId = req.user._id;
 
@@ -52,7 +89,7 @@ export const removeSavedStory = async (req, res) => {
   });
 };
 
-export const getMyStories = async (req, res) => {
+export const getMyArticle = async (req, res) => {
   const userId = req.user._id;
 
   const page = Number(req.query.page) || 1;
@@ -60,12 +97,12 @@ export const getMyStories = async (req, res) => {
   const skip = (page - 1) * perPage;
 
   const [stories, total] = await Promise.all([
-    Story.find({ owner: userId })
+    Article.find({ owner: userId })
       .skip(skip)
       .limit(perPage)
       .sort({ createdAt: -1 }),
 
-    Story.countDocuments({ owner: userId }),
+    Article.countDocuments({ owner: userId }),
   ]);
 
   res.json({
@@ -77,7 +114,7 @@ export const getMyStories = async (req, res) => {
   });
 };
 
-export const getSavedStories = async (req, res) => {
+export const getSavedArticles = async (req, res) => {
   const userId = req.user._id;
 
   const page = Number(req.query.page) || 1;
