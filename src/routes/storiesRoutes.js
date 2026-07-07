@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import { celebrate } from 'celebrate';
 
+import { getAllStories } from '../controllers/storiesController.js';
+
 import {
   saveStory,
   removeSavedStory,
@@ -10,11 +12,14 @@ import {
 } from '../controllers/storiesController.js';
 
 import {
+  getAllStoriesSchema,
   storyIdSchema,
   paginationSchema,
 } from '../validations/storiesValidation.js';
 
 const storyRouter = Router();
+
+storyRouter.get('/stories', celebrate(getAllStoriesSchema), getAllStories);
 
 storyRouter.get('/stories/:id', getStoryById);
 

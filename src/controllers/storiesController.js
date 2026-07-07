@@ -2,6 +2,47 @@ import createHttpError from 'http-errors';
 
 import { SavedStory } from '../models/savedStory.js';
 import { Story } from '../models/story.js';
+import { Article } from '../models/article.js';
+// не видаляти ці імпорти, вони потрібні для звязки з колекціями в БД
+import { Category } from '../models/categories.js';
+import { User } from '../models/user.js';
+
+export const getAllStories = async (req, res) => {
+  const { page = 1, perPage = 9, category, type } = req.query;
+
+  const pageNumber = Number(page);
+  const perPageNumber = Number(perPage);
+  const skip = (pageNumber - 1) * perPageNumber;
+
+  const filter = {};
+
+  if (category) {
+    filter.category = category;
+  }
+
+  const sort = type === 'popular' ? { rate: -1 } : { date: -1 };
+
+  const [totalStories, stories] = await Promise.all([
+    Article.countDocuments(filter),
+    Article.find(filter)
+      .sort(sort)
+      .skip(skip)
+      .limit(perPageNumber)
+      .populate('category')
+      .populate('ownerId')
+      .lean(),
+  ]);
+
+  const totalPages = Math.ceil(totalStories / perPageNumber) || 1;
+
+  res.status(200).json({
+    page: pageNumber,
+    perPage: perPageNumber,
+    totalStories,
+    totalPages,
+    stories,
+  });
+};
 
 export const getStoryById = async (req, res) => {
   const { id } = req.params;
