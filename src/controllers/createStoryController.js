@@ -35,9 +35,12 @@ export const createStoryController = async (req, res, next) => {
       category,
     });
 
+    await story.populate(['category', 'ownerId']);
+
     res.status(201).json({
       id: story._id,
       message: 'Story created successfully',
+      story,
     });
   } catch (error) {
     next(error);

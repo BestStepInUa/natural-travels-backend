@@ -24,6 +24,7 @@ import { authRouter } from './routes/authRoutes.js';
 import storyRouter from './routes/storiesRoutes.js';
 import userRouter from './routes/userRoutes.js';
 import createStoryRouter from './routes/createStoryRoute.js';
+import categoriesRouter from './routes/categoriesRoutes.js';
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use(authRouter);
 app.use(storyRouter);
 app.use('/api/users', userRouter);
 app.use(createStoryRouter);
+app.use(categoriesRouter);
 
 app.use(notFoundHandler);
 app.use(errors());
