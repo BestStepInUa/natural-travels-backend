@@ -1,6 +1,6 @@
 import createHttpError from "http-errors";
 import { User } from '../models/user.js';
-import { Story } from '../models/story.js';
+import { Article } from '../models/article.js';
 
 export const getUserPublicProfileWithStories = async (userId, page, perPage) => {
   const user = await User.findById(userId);
@@ -11,7 +11,7 @@ export const getUserPublicProfileWithStories = async (userId, page, perPage) => 
 
   const skip = (page - 1) * perPage;
 
-  const stories = await Story.find({ owner: userId })
+  const stories = await Article.find({ owner: userId })
     .skip(skip)
     .limit(perPage)
     .sort({ createdAt: -1 });
