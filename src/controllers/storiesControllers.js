@@ -140,3 +140,68 @@ export const getSavedStories = async (req, res) => {
     totalPages: Math.ceil(total / perPage),
   });
 };
+
+export const getRecommendedStories = async (req, res) => {
+  const { page = 1, perPage = 9 } = req.query;
+  const pageNumber = Number(page);
+  const perPageNumber = Number(perPage);
+  const skip = (pageNumber - 1) * perPageNumber;
+
+  const [topCategory] = await SavedStory.aggregate([
+    {
+      $lookup: {
+        from: Story.collection.name,
+        localField: 'storyId',
+        foreignField: '_id',
+        as: 'story',
+      },
+    },
+    { $unwind: '$story' },
+    { $group: { _id: '$story.category', totalSaves: { $sum: 1 } } },
+    { $sort: { totalSaves: -1 } },
+    { $limit: 1 },
+  ]);
+
+  if (!topCategory) {
+    return res.status(200).json({
+      page: pageNumber,
+      perPage: perPageNumber,
+      totalStories: 0,
+      totalPages: 1,
+      stories: [],
+    });
+  }
+
+  const pipeline = [
+    { $match: { category: topCategory._id } },
+    {
+      $lookup: {
+        from: SavedStory.collection.name,
+        localField: '_id',
+        foreignField: 'storyId',
+        as: 'saves',
+      },
+    },
+    { $addFields: { savesCount: { $size: '$saves' } } },
+    { $sort: { savesCount: -1, createdAt: -1 } },
+    { $project: { saves: 0 } },
+    {
+      $facet: {
+        stories: [{ $skip: skip }, { $limit: perPageNumber }],
+        totalCount: [{ $count: 'total' }],
+      },
+    },
+  ];
+
+  const [result] = await Story.aggregate(pipeline);
+  const stories = result.stories;
+  const totalStories = result.totalCount[0]?.total || 0;
+
+  res.status(200).json({
+    page: pageNumber,
+    perPage: perPageNumber,
+    totalStories,
+    totalPages: Math.ceil(totalStories / perPageNumber) || 1,
+    stories,
+  });
+};
