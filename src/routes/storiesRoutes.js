@@ -3,24 +3,24 @@ import { celebrate } from 'celebrate';
 import { authenticate } from '../middleware/authenticate.js';
 
 import {
-  getAllStories,
-  saveStory,
-  removeSavedStory,
-  getMyStories,
-  getSavedStories,
-  getStoryById,
+  getAllArticles,
+  saveArticle,
+  removeSavedArticle,
+  getMyArticle,
+  getSavedArticles,
+  getArticleById,
   getRecommendedStories,
 } from '../controllers/storiesControllers.js';
 
 import {
-  getAllStoriesSchema,
-  storyIdSchema,
+  getAllArticlesSchema,
+  articleIdSchema,
   paginationSchema,
 } from '../validations/storiesValidation.js';
 
 const storyRouter = Router();
 
-storyRouter.get('/stories', celebrate(getAllStoriesSchema), getAllStories);
+storyRouter.get('/stories', celebrate(getAllArticlesSchema), getAllArticles);
 
 storyRouter.get(
   '/stories/recommended',
@@ -32,30 +32,30 @@ storyRouter.get(
   '/stories/my-stories',
   authenticate,
   celebrate(paginationSchema),
-  getMyStories,
+  getMyArticle,
 );
 
 storyRouter.get(
   '/stories/saved',
   authenticate,
   celebrate(paginationSchema),
-  getSavedStories,
+  getSavedArticles,
 );
 
 storyRouter.post(
   '/stories/saved/:storyId',
   authenticate,
-  celebrate(storyIdSchema),
-  saveStory,
+  celebrate(articleIdSchema),
+  saveArticle,
 );
 
 storyRouter.delete(
   '/stories/saved/:storyId',
   authenticate,
-  celebrate(storyIdSchema),
-  removeSavedStory,
+  celebrate(articleIdSchema),
+  removeSavedArticle,
 );
 
-storyRouter.get('/stories/:id', getStoryById);
+storyRouter.get('/stories/:id', getArticleById);
 
 export default storyRouter;
