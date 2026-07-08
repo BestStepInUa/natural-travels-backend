@@ -22,6 +22,7 @@ import { connectMongoDB } from './db/connectMongoDB.js';
 import { authRouter } from './routes/authRoutes.js';
 
 import storyRouter from './routes/storiesRoutes.js';
+import userRouter from './routes/userRoutes.js';
 import createStoryRouter from './routes/createStoryRoute.js';
 
 const app = express();
@@ -35,6 +36,7 @@ app.use(express.json());
 // part to connect routers
 app.use(authRouter);
 app.use(storyRouter);
+app.use('/api/users', userRouter);
 app.use(createStoryRouter);
 
 app.use(notFoundHandler);
