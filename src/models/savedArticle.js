@@ -9,9 +9,9 @@ const savedStorySchema = new Schema(
       ref: 'user',
       required: true,
     },
-    storyId: {
+    articleId: {
       type: Schema.Types.ObjectId,
-      ref: 'story',
+      ref: 'article',
       required: true,
     },
   },
@@ -21,10 +21,10 @@ const savedStorySchema = new Schema(
   },
 );
 
-savedStorySchema.index({ userId: 1, storyId: 1 }, { unique: true });
+savedStorySchema.index({ userId: 1, articleId: 1 }, { unique: true });
 
 savedStorySchema.post('save', handleMongooseError);
 savedStorySchema.pre('findOneAndUpdate', setUpdateOptions);
 savedStorySchema.post('findOneAndUpdate', handleMongooseError);
 
-export const SavedStory = model('savedStory', savedStorySchema);
+export const SavedArticle = model('savedArticle', savedStorySchema);

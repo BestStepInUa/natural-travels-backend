@@ -1,6 +1,6 @@
 import createHttpError from 'http-errors';
 
-import { SavedStory } from '../models/savedStory.js';
+import { SavedArticle } from '../models/savedArticle.js';
 import { Article } from '../models/article.js';
 
 export const getAllArticles = async (req, res) => {
@@ -61,9 +61,9 @@ export const saveArticle = async (req, res) => {
     throw createHttpError(404, 'Story not found');
   }
 
-  await SavedStory.create({
+  await SavedArticle.create({
     userId,
-    storyId,
+    articleId: storyId,
   });
 
   res.status(201).json({
@@ -75,9 +75,9 @@ export const removeSavedArticle = async (req, res) => {
   const { storyId } = req.params;
   const userId = req.user._id;
 
-  const deleted = await SavedStory.findOneAndDelete({
+  const deleted = await SavedArticle.findOneAndDelete({
     userId,
-    storyId,
+    articleId: storyId,
   });
 
   if (!deleted) {
@@ -122,17 +122,17 @@ export const getSavedArticles = async (req, res) => {
   const skip = (page - 1) * perPage;
 
   const [saved, total] = await Promise.all([
-    SavedStory.find({ userId })
-      .populate('storyId')
+    SavedArticle.find({ userId })
+      .populate('articleId')
       .skip(skip)
       .limit(perPage)
       .sort({ createdAt: -1 }),
 
-    SavedStory.countDocuments({ userId }),
+    SavedArticle.countDocuments({ userId }),
   ]);
 
   res.json({
-    data: saved.map((item) => item.storyId),
+    data: saved.map((item) => item.articleId),
     page,
     perPage,
     totalItems: total,
