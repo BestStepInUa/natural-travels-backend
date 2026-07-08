@@ -1,3 +1,4 @@
+import { objectIdValidator } from '../utils/objectIdValidator.js';
 import { Joi, Segments } from 'celebrate';
 
 export const createStorySchema = {
@@ -14,17 +15,8 @@ export const createStorySchema = {
       'string.max': 'Текст історії має містити не більше 3000 символів',
       'any.required': 'Текст історії є обов’язковим',
     }),
-    category: Joi.string()
-      .trim()
-      .pattern(
-        /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/,
-      )
-      .required()
-      .messages({
-        'string.empty': 'Вибір категорії є обов’язковим',
-        'string.pattern.base':
-          'Категорія має містити валідний унікальний ідентифікатор (UUID)',
-        'any.required': 'Вибір категорії є обов’язковим',
-      }),
+    category: Joi.string().required().custom(objectIdValidator).messages({
+      'any.required': 'Вибір категорії є обов’язковим',
+    }),
   }),
 };
