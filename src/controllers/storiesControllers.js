@@ -42,7 +42,10 @@ export const getAllArticles = async (req, res) => {
 
 export const getArticleById = async (req, res) => {
   const { id } = req.params;
-  const result = await Article.findById(id);
+  const result = await Article.findById(id)
+  .populate('category')
+  .populate('ownerId')
+  .lean();
 
   if (!result) {
     return res.status(404).json({ message: 'Story not found' });
