@@ -1,4 +1,7 @@
-import { getUserPublicProfileWithStories, getAllUsers } from '../services/userServices.js';
+import {
+  getUserPublicProfileWithStories,
+  getAllUsers,
+} from '../services/userServices.js';
 
 export const getPublicProfile = async (req, res) => {
   const userId = req.params.id;

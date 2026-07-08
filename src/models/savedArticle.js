@@ -9,7 +9,7 @@ const savedStorySchema = new Schema(
       ref: 'user',
       required: true,
     },
-    articleId: {
+    storyId: {
       type: Schema.Types.ObjectId,
       ref: 'article',
       required: true,
@@ -21,7 +21,7 @@ const savedStorySchema = new Schema(
   },
 );
 
-savedStorySchema.index({ userId: 1, articleId: 1 }, { unique: true });
+savedStorySchema.index({ userId: 1, storyId: 1 }, { unique: true });
 
 savedStorySchema.post('save', handleMongooseError);
 savedStorySchema.pre('findOneAndUpdate', setUpdateOptions);

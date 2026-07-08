@@ -43,9 +43,9 @@ export const getAllArticles = async (req, res) => {
 export const getArticleById = async (req, res) => {
   const { id } = req.params;
   const result = await Article.findById(id)
-  .populate('category')
-  .populate('ownerId')
-  .lean();
+    .populate('category')
+    .populate('ownerId')
+    .lean();
 
   if (!result) {
     return res.status(404).json({ message: 'Story not found' });
@@ -66,7 +66,7 @@ export const saveArticle = async (req, res) => {
 
   await SavedArticle.create({
     userId,
-    articleId: storyId,
+    storyId,
   });
 
   res.status(201).json({
@@ -80,7 +80,7 @@ export const removeSavedArticle = async (req, res) => {
 
   const deleted = await SavedArticle.findOneAndDelete({
     userId,
-    articleId: storyId,
+    storyId,
   });
 
   if (!deleted) {
@@ -100,12 +100,12 @@ export const getMyArticle = async (req, res) => {
   const skip = (page - 1) * perPage;
 
   const [stories, total] = await Promise.all([
-    Article.find({ owner: userId })
+    Article.find({ ownerId: userId })
       .skip(skip)
       .limit(perPage)
       .sort({ createdAt: -1 }),
 
-    Article.countDocuments({ owner: userId }),
+    Article.countDocuments({ ownerId: userId }),
   ]);
 
   res.json({
@@ -126,7 +126,7 @@ export const getSavedArticles = async (req, res) => {
 
   const [saved, total] = await Promise.all([
     SavedArticle.find({ userId })
-      .populate('articleId')
+      .populate('storyId')
       .skip(skip)
       .limit(perPage)
       .sort({ createdAt: -1 }),
@@ -135,7 +135,7 @@ export const getSavedArticles = async (req, res) => {
   ]);
 
   res.json({
-    data: saved.map((item) => item.articleId),
+    data: saved.map((item) => item.storyId),
     page,
     perPage,
     totalItems: total,
@@ -149,7 +149,7 @@ export const getRecommendedStories = async (req, res) => {
   const perPageNumber = Number(perPage);
   const skip = (pageNumber - 1) * perPageNumber;
 
-  const [topCategory] = await SavedStory.aggregate([
+  const [topCategory] = await SavedArticle.aggregate([
     {
       $lookup: {
         from: Article.collection.name,
@@ -178,7 +178,7 @@ export const getRecommendedStories = async (req, res) => {
     { $match: { category: topCategory._id } },
     {
       $lookup: {
-        from: SavedStory.collection.name,
+        from: SavedArticle.collection.name,
         localField: '_id',
         foreignField: 'storyId',
         as: 'saves',
