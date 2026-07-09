@@ -1,14 +1,14 @@
 import { model, Schema } from 'mongoose';
 import { handleMongooseError, setUpdateOptions } from './hooks.js';
+import { AVATAR_URL } from '../constants/user.js';
 
 const userSchema = new Schema(
   {
     name: { type: String, trim: true, required: true },
     email: { type: String, trim: true, required: true, unique: true },
     password: { type: String, trim: true, required: true },
-    avatar: { type: String, trim: true, default: "" },
     storiesCount: { type: Number, default: 0 },
-    avatarUrl: { type: String, trim: true, default: '' },
+    avatarUrl: { type: String, trim: true, default: AVATAR_URL },
   },
   { timestamps: true, versionKey: false },
 );
