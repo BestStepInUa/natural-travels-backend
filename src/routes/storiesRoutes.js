@@ -31,26 +31,26 @@ storyRouter.get(
 storyRouter.get(
   '/stories/my-stories',
   authenticate,
-  celebrate(paginationSchema),
+  celebrate(getAllArticlesSchema),
   getMyArticle,
 );
 
 storyRouter.get(
-  '/stories/saved',
+  '/stories/saved-stories',
   authenticate,
-  celebrate(paginationSchema),
+  celebrate(getAllArticlesSchema),
   getSavedArticles,
 );
 
 storyRouter.post(
-  '/stories/saved/:storyId',
+  '/stories/save/:storyId',
   authenticate,
   celebrate(articleIdSchema),
   saveArticle,
 );
 
 storyRouter.delete(
-  '/stories/saved/:storyId',
+  '/stories/save/:storyId',
   authenticate,
   celebrate(articleIdSchema),
   removeSavedArticle,
