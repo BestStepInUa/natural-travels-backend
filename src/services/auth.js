@@ -19,23 +19,44 @@ export const createSession = async (userId) => {
   return session;
 };
 
+// export const setSessionCookies = (res, session) => {
+//   res.cookie('accessToken', session.accessToken, {
+//     httpOnly: true,
+//     secure: true,
+//     sameSite: 'none',
+//     maxAge: FIFTEEN_MINUTES,
+//   });
+//   res.cookie('refreshToken', session.refreshToken, {
+//     httpOnly: true,
+//     secure: true,
+//     sameSite: 'none',
+//     maxAge: ONE_DAY,
+//   });
+//   res.cookie('sessionId', session._id, {
+//     httpOnly: true,
+//     secure: true,
+//     sameSite: 'none',
+//     maxAge: ONE_DAY,
+//   });
+// };
+const isDev = process.env.NODE_ENV === 'development';
 export const setSessionCookies = (res, session) => {
   res.cookie('accessToken', session.accessToken, {
     httpOnly: true,
-    secure: true,
-    sameSite: 'none',
+    secure: !isDev,
+    sameSite: isDev ? 'lax' : 'none',
     maxAge: FIFTEEN_MINUTES,
   });
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
-    secure: true,
-    sameSite: 'none',
+    secure: !isDev,
+    sameSite: isDev ? 'lax' : 'none',
     maxAge: ONE_DAY,
   });
   res.cookie('sessionId', session._id, {
     httpOnly: true,
-    secure: true,
-    sameSite: 'none',
+    secure: !isDev,
+    sameSite: isDev ? 'lax' : 'none',
     maxAge: ONE_DAY,
   });
 };
