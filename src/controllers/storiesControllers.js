@@ -71,6 +71,7 @@ export const saveArticle = async (req, res) => {
 
   res.status(201).json({
     message: 'Story saved successfully',
+    data: story,
   });
 };
 
@@ -89,6 +90,7 @@ export const removeSavedArticle = async (req, res) => {
 
   res.status(200).json({
     message: 'Story removed from saved',
+    data: deleted,
   });
 };
 
