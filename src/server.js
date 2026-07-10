@@ -28,18 +28,23 @@ import categoriesRouter from './routes/categoriesRoutes.js';
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    credentials: true,
+  }),
+);
 app.use(cookieParser());
 app.use(helmet());
 app.use(logger);
 app.use(express.json());
 
 // part to connect routers
-app.use(authRouter);
-app.use(storyRouter);
+app.use('/api', authRouter);
+app.use('/api', storyRouter);
 app.use('/api/users', userRouter);
-app.use(createStoryRouter);
-app.use(categoriesRouter);
+app.use('/api', createStoryRouter);
+app.use('/api', categoriesRouter);
 
 app.use(notFoundHandler);
 app.use(errors());
