@@ -88,3 +88,7 @@ export const getMe = async (req, res) => {
     res.status(error.status || 500).json({ message: error.message });
   }
 };
+
+export const checkSession = async (req, res) => {
+  res.status(200).json({ success: true });
+};
