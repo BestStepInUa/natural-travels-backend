@@ -8,7 +8,7 @@ import { createStorySchema } from '../validations/createStoryValidation.js';
 const router = Router();
 
 router.post(
-  '/api/stories',
+  '/stories',
   authenticate,
   upload.single('img'),
   celebrate(createStorySchema),
