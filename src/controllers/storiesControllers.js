@@ -16,7 +16,7 @@ export const getAllArticles = async (req, res) => {
     filter.category = category;
   }
 
-  const sort = type === 'popular' ? { rate: -1 } : {};
+  const sort = type === 'popular' ? { rate: -1, _id: 1 } : {};
 
   const [totalStories, stories] = await Promise.all([
     Article.countDocuments(filter),
@@ -160,7 +160,7 @@ export const getRecommendedStories = async (req, res) => {
     },
     { $unwind: '$article' },
     { $group: { _id: '$article.category', totalSaves: { $sum: 1 } } },
-    { $sort: { totalSaves: -1 } },
+    { $sort: { totalSaves: -1, createdAt: -1, _id: 1 } },
     { $limit: 1 },
   ]);
 
