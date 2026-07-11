@@ -4,7 +4,7 @@ import { SavedArticle } from '../models/savedArticle.js';
 import { Article } from '../models/article.js';
 
 export const getAllArticles = async (req, res) => {
-  const { page = 1, perPage = 9, category, type } = req.query;
+  const { page = 1, perPage = 9, categoryId, type } = req.query;
 
   const pageNumber = Number(page);
   const perPageNumber = Number(perPage);
@@ -12,8 +12,8 @@ export const getAllArticles = async (req, res) => {
 
   const filter = {};
 
-  if (category) {
-    filter.category = category;
+  if (categoryId) {
+    filter.category = categoryId;
   }
 
   const sort = type === 'popular' ? { rate: -1, _id: 1 } : {};
