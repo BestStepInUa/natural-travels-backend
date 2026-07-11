@@ -42,7 +42,7 @@ app.use(express.json());
 // part to connect routers
 app.use(authRouter);
 app.use(storyRouter);
-app.use('/api/users', userRouter);
+app.use(userRouter);
 app.use(createStoryRouter);
 app.use(categoriesRouter);
 
