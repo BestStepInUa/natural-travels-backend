@@ -7,12 +7,12 @@ import { paginationSchema } from '../validations/storiesValidation.js';
 const userRouter = Router();
 
 userRouter.get(
-  '/:id/public',
+  '/users/:id/public',
   celebrate(userIdSchema),
   celebrate(paginationSchema),
   getPublicProfile,
 );
 
-userRouter.get('/', celebrate(paginationSchema), getUsers);
+userRouter.get('/users', celebrate(paginationSchema), getUsers);
 
 export default userRouter;
