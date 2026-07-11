@@ -40,11 +40,11 @@ app.use(logger);
 app.use(express.json());
 
 // part to connect routers
-app.use('/api', authRouter);
-app.use('/api', storyRouter);
+app.use(authRouter);
+app.use(storyRouter);
 app.use('/api/users', userRouter);
-app.use('/api', createStoryRouter);
-app.use('/api', categoriesRouter);
+app.use(createStoryRouter);
+app.use(categoriesRouter);
 
 app.use(notFoundHandler);
 app.use(errors());
