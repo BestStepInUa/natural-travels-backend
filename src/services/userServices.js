@@ -15,12 +15,15 @@ export const getUserPublicProfileWithStories = async (
 
   const skip = (page - 1) * perPage;
 
-  const stories = await Article.find({ owner: userId })
-    .skip(skip)
-    .limit(perPage)
-    .sort({ createdAt: -1 });
+  const [stories, total] = await Promise.all([
+    Article.find({ ownerId: userId })
+      .populate('ownerId', 'name avatarUrl')
+      .skip(skip)
+      .limit(perPage)
+      .sort({ createdAt: -1 }),
+    Article.countDocuments({ ownerId: userId }),
+  ]);
 
-  const total = user.storiesCount || 0;
   const totalPages = Math.ceil(total / perPage);
 
   return {
@@ -34,7 +37,6 @@ export const getUserPublicProfileWithStories = async (
     },
   };
 };
-
 export const getAllUsers = async (page, perPage) => {
   const skip = (page - 1) * perPage;
 
