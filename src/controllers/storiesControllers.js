@@ -31,6 +31,8 @@ export const getAllArticles = async (req, res) => {
 
   const totalPages = Math.ceil(totalStories / perPageNumber) || 1;
 
+  console.log(stories[0]);
+
   res.status(200).json({
     page: pageNumber,
     perPage: perPageNumber,
@@ -128,7 +130,13 @@ export const getSavedArticles = async (req, res) => {
 
   const [saved, total] = await Promise.all([
     SavedArticle.find({ userId })
-      .populate('storyId')
+      .populate({
+        path: 'storyId',
+        populate: {
+          path: 'ownerId',
+          select: 'name',
+        },
+      })
       .skip(skip)
       .limit(perPage)
       .sort({ createdAt: -1 }),
