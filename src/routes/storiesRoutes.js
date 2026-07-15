@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { celebrate } from 'celebrate';
 import { authenticate } from '../middleware/authenticate.js';
+import { getSavedStoryIds } from '../controllers/storiesControllers.js';
 
 import {
   getAllArticles,
@@ -55,6 +56,7 @@ storyRouter.delete(
   celebrate(articleIdSchema),
   removeSavedArticle,
 );
+storyRouter.get('/stories/saved-ids', authenticate, getSavedStoryIds);
 
 storyRouter.get('/stories/:id', getArticleById);
 
