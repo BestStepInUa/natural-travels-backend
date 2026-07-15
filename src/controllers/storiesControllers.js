@@ -60,19 +60,37 @@ export const saveArticle = async (req, res) => {
   const { storyId } = req.params;
   const userId = req.user._id;
 
-  const story = await Article.findById(storyId);
+  const storyExists = await Article.exists({ _id: storyId });
 
-  if (!story) {
+  if (!storyExists) {
     throw createHttpError(404, 'Story not found');
   }
 
-  await SavedArticle.create({
-    userId,
-    storyId,
-  });
+  const saveResult = await SavedArticle.updateOne(
+    { userId, storyId },
+    {
+      $setOnInsert: {
+        userId,
+        storyId,
+      },
+    },
+    { upsert: true },
+  );
 
-  res.status(201).json({
-    message: 'Story saved successfully',
+  const wasInserted = saveResult.upsertedCount === 1;
+
+  const story = wasInserted
+    ? await Article.findByIdAndUpdate(
+        storyId,
+        { $inc: { rate: 1 } },
+        { new: true },
+      )
+    : await Article.findById(storyId);
+
+  res.status(wasInserted ? 201 : 200).json({
+    message: wasInserted
+      ? 'Story saved successfully'
+      : 'Story is already saved',
     data: story,
   });
 };
@@ -90,9 +108,15 @@ export const removeSavedArticle = async (req, res) => {
     throw createHttpError(404, 'Story is not in saved list');
   }
 
+  const story = await Article.findByIdAndUpdate(
+    storyId,
+    { $inc: { rate: -1 } },
+    { new: true },
+  );
+
   res.status(200).json({
     message: 'Story removed from saved',
-    data: deleted,
+    data: story ?? deleted,
   });
 };
 
@@ -215,5 +239,15 @@ export const getRecommendedStories = async (req, res) => {
     totalStories,
     totalPages: Math.ceil(totalStories / perPageNumber) || 1,
     stories,
+  });
+};
+
+export const getSavedStoryIds = async (req, res) => {
+  const userId = req.user._id;
+
+  const saved = await SavedArticle.find({ userId }).select('storyId').lean();
+
+  res.status(200).json({
+    savedArticles: saved.map((item) => item.storyId.toString()),
   });
 };
