@@ -131,7 +131,10 @@ export const getMyArticle = async (req, res) => {
     Article.find({ ownerId: userId })
       .skip(skip)
       .limit(perPage)
-      .sort({ createdAt: -1 }),
+      .sort({ createdAt: -1 })
+      .populate('category')
+      .populate('ownerId')
+      .lean(),
 
     Article.countDocuments({ ownerId: userId }),
   ]);
