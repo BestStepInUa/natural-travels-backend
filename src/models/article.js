@@ -8,7 +8,7 @@ const articleSchema = new Schema(
     article: { type: String, minlength: 12, maxlength: 3000, required: true },
     category: { type: Schema.Types.ObjectId, ref: 'category', required: true },
     ownerId: { type: Schema.Types.ObjectId, ref: 'user', required: true },
-    rate: { type: Number, default: 1 },
+    rate: { type: Number, default: 0 },
     date: String,
   },
   {
