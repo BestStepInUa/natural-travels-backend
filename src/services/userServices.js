@@ -26,8 +26,12 @@ export const getUserPublicProfileWithStories = async (
 
   const totalPages = Math.ceil(total / perPage);
 
+  const userObj = user.toObject();
+  userObj.articlesAmount = total;
+  userObj.storiesCount = total;
+
   return {
-    user: user,
+    user: userObj,
     stories: {
       data: stories,
       page: page,

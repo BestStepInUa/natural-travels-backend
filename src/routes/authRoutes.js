@@ -27,7 +27,7 @@ authRouter.post(
   celebrate(loginUserSchema, { abortEarly: false }),
   loginUser,
 );
-authRouter.post('/auth/refresh', authenticate, refreshUserSession);
+authRouter.post('/auth/refresh', refreshUserSession);
 authRouter.post('/auth/logout', authenticate, logoutUser);
 authRouter.get('/auth/me', authenticate, getMe);
 authRouter.get('/auth/session', authenticate, checkSession);

@@ -3,6 +3,8 @@ import { User } from '../models/user.js';
 import bcrypt from 'bcrypt';
 import { createSession, setSessionCookies } from '../services/auth.js';
 import { Session } from '../models/session.js';
+import { SavedArticle } from '../models/savedArticle.js';
+import { Article } from '../models/article.js';
 
 export const registerUser = async (req, res) => {
   const { email, password } = req.body;
@@ -83,7 +85,16 @@ export const logoutUser = async (req, res) => {
 
 export const getMe = async (req, res) => {
   try {
-    res.json(req.user);
+    const [savedArticlesAmount, storiesCount] = await Promise.all([
+      SavedArticle.countDocuments({ userId: req.user._id }),
+      Article.countDocuments({ ownerId: req.user._id }),
+    ]);
+
+    res.json({
+      ...req.user.toObject(),
+      savedArticlesAmount,
+      storiesCount,
+    });
   } catch (error) {
     res.status(error.status || 500).json({ message: error.message });
   }
